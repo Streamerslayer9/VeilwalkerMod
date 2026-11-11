@@ -17,10 +17,10 @@ public class ModBlocks {
     public static final Block VEIL_ORE = register("veil_ore",
             new ExperienceDroppingBlock(UniformIntProvider.create(2, 5),
                     AbstractBlock.Settings.create()
-                            .mapColor(MapColor.PURPLE)
-                            .strength(3.5f, 3.0f)
+                            .mapColor(MapColor.DEEPSLATE_GRAY)
+                            .strength(4.5f, 3.0f)
                             .requiresTool()
-                            .sounds(BlockSoundGroup.AMETHYST_BLOCK)));
+                            .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block VEIL_BLOCK = register("veil_block",
             new Block(AbstractBlock.Settings.create()

@@ -1,6 +1,6 @@
 {
   "itemGroup.veilwalker.main": "Veilwalker",
-  "block.veilwalker.veil_ore": "Veil Ore",
+  "block.veilwalker.veil_ore": "Deepslate Veil Ore",
   "block.veilwalker.veil_block": "Block of Veil Shards",
   "block.veilwalker.echo_lantern": "Echo Lantern",
   "item.veilwalker.veil_shard": "Veil Shard",
@@ -11,5 +11,8 @@
   "item.veilwalker.echo_anchor.tooltip.unbound": "Unbound",
   "item.veilwalker.echo_anchor.tooltip.help": "Sneak + Use: bind | Use: blink back",
   "item.veilwalker.phase_blade": "Phase Blade",
-  "item.veilwalker.phase_blade.tooltip": "25% chance to slip behind your target"
+  "item.veilwalker.phase_blade.tooltip": "Right-click a creature to slip behind it",
+  "item.veilwalker.phase_blade.tooltip2": "Backstab, slow, reveal | 10 block range",
+  "item.veilwalker.phase_blade.no_target": "Nothing in the veil's reach.",
+  "item.veilwalker.phase_blade.blocked": "No room to slip through."
 }
