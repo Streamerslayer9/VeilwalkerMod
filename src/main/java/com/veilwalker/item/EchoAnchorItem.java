@@ -1,21 +1,21 @@
 package com.veilwalker.item;
 
 import com.veilwalker.ModComponents;
+import com.veilwalker.VeilFx;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.Set;
 /**
  * Sneak + right-click: bind the anchor to where you stand (any dimension).
  * Right-click: blink back to the anchor, even across dimensions. Costs durability.
+ * While held and bound, motes of veil light orbit you.
  */
 public class EchoAnchorItem extends Item {
     public EchoAnchorItem(Settings settings) {
@@ -36,12 +37,11 @@ public class EchoAnchorItem extends Item {
         if (world.isClient) {
             return TypedActionResult.success(stack);
         }
+        ServerWorld origin = (ServerWorld) world;
 
         if (user.isSneaking()) {
-            GlobalPos here = GlobalPos.create(world.getRegistryKey(), user.getBlockPos());
-            stack.set(ModComponents.ANCHOR, here);
-            world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                    SoundEvents.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.PLAYERS, 1.0f, 1.4f);
+            stack.set(ModComponents.ANCHOR, GlobalPos.create(world.getRegistryKey(), user.getBlockPos()));
+            VeilFx.bindEffect(origin, user.getPos());
             user.sendMessage(Text.translatable("item.veilwalker.echo_anchor.bound").formatted(Formatting.LIGHT_PURPLE), true);
             return TypedActionResult.success(stack);
         }
@@ -52,25 +52,32 @@ public class EchoAnchorItem extends Item {
             return TypedActionResult.fail(stack);
         }
 
-        ServerWorld destination = ((ServerWorld) world).getServer().getWorld(anchor.dimension());
+        ServerWorld destination = origin.getServer().getWorld(anchor.dimension());
         if (destination == null) {
             user.sendMessage(Text.translatable("item.veilwalker.echo_anchor.lost").formatted(Formatting.RED), true);
             return TypedActionResult.fail(stack);
         }
 
-        ServerWorld origin = (ServerWorld) world;
-        origin.spawnParticles(ParticleTypes.REVERSE_PORTAL, user.getX(), user.getY() + 1, user.getZ(), 40, 0.3, 0.6, 0.3, 0.1);
+        VeilFx.vanishEffect(origin, user.getPos());
 
         BlockPos p = anchor.pos();
         user.teleport(destination, p.getX() + 0.5, p.getY(), p.getZ() + 0.5, Set.of(), user.getYaw(), user.getPitch());
 
-        destination.spawnParticles(ParticleTypes.PORTAL, p.getX() + 0.5, p.getY() + 1, p.getZ() + 0.5, 60, 0.4, 0.8, 0.4, 0.3);
-        destination.playSound(null, p.getX() + 0.5, p.getY(), p.getZ() + 0.5,
-                SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 0.8f);
+        VeilFx.arriveEffect(destination, new Vec3d(p.getX() + 0.5, p.getY(), p.getZ() + 0.5));
 
         user.getItemCooldownManager().set(this, 60);
         stack.damage(1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         return TypedActionResult.success(stack);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (world instanceof ServerWorld sw && entity instanceof PlayerEntity player
+                && (selected || player.getOffHandStack() == stack)
+                && stack.contains(ModComponents.ANCHOR)
+                && world.getTime() % 3 == 0) {
+            VeilFx.orbit(sw, player, world.getTime(), 0.9, 2);
+        }
     }
 
     @Override

@@ -12,6 +12,17 @@
   (6 damage), slows and reveals the target, and gives you Speed. 2.5s cooldown. Left-click is a normal sword swing.
 - A dedicated **Veilwalker** creative tab.
 
+## Animations & effects (v1.3.0)
+- **Animated textures** on every item and block: shard shimmer + twinkles, pulsing anchor with orbiting sparks,
+  an energy pulse racing up the Phase Blade, breathing ore crystals, shimmering Veil Block, flickering Echo Lantern.
+- **Ambient particles**: Veil Ore and Veil Blocks sparkle on exposed faces; Echo Lanterns release rising light motes.
+  Ore, blocks and lanterns also give off light.
+- **Echo Anchor**: binding sends out rings and a rising double spiral with chimes; blinking collapses rings into the
+  veil, then erupts with expanding rings, a light burst and portal particles. A bound anchor glows and motes orbit you
+  while you hold it.
+- **Phase Blade**: enchant-glint always on, a mote drifts around you while held, normal hits leave veil dust, and a
+  teleport leaves a streak of light, a sweep slash, crit sparks and layered sounds.
+
 ## Recipes
 - Echo Anchor: echo shard top/bottom, veil shards left/right, ender pearl center.
 - Phase Blade (shapeless): diamond sword + 2 veil shards + echo shard + ender pearl.
@@ -22,4 +33,4 @@
 2. Actions tab -> "Build Mod" runs automatically -> download artifact `veilwalker-jar` (use the jar without `-sources`).
 3. Put it in `.minecraft/mods` with Fabric Loader 0.16+ and Fabric API for 1.21.1.
 
-Tag `v1.2.0` to attach the jar to a GitHub Release.
+Tag `v1.3.0` to attach the jar to a GitHub Release.

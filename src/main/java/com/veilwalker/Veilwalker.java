@@ -10,6 +10,7 @@ public class Veilwalker implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        VeilFx.init();
         ModComponents.init();
         ModBlocks.init();
         ModItems.init();

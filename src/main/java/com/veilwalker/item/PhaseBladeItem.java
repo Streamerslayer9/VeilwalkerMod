@@ -1,5 +1,7 @@
 package com.veilwalker.item;
 
+import com.veilwalker.VeilFx;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -12,8 +14,6 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -77,27 +77,21 @@ public class PhaseBladeItem extends SwordItem {
             return TypedActionResult.fail(stack);
         }
 
-        // Vanish
-        serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL,
-                player.getX(), player.getY() + 1, player.getZ(), 40, 0.3, 0.6, 0.3, 0.1);
-        serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 0.8f, 1.6f);
+        // Vanish, leaving an afterimage streak behind
+        Vec3d from = player.getPos();
+        VeilFx.vanishEffect(serverWorld, from);
+        VeilFx.trail(serverWorld, from.add(0, 1, 0), destination.add(0, 1, 0));
 
         // Reappear behind the target, facing it
         double dx = target.getX() - destination.x;
         double dz = target.getZ() - destination.z;
         float yaw = (float) (MathHelper.atan2(dz, dx) * 180.0 / Math.PI) - 90.0f;
         player.teleport(serverWorld, destination.x, destination.y, destination.z, Set.of(), yaw, player.getPitch());
-
-        serverWorld.spawnParticles(ParticleTypes.PORTAL,
-                destination.x, destination.y + 1, destination.z, 40, 0.3, 0.6, 0.3, 0.3);
-        serverWorld.playSound(null, destination.x, destination.y, destination.z,
-                SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.2f);
+        VeilFx.arriveEffect(serverWorld, destination);
 
         // Backstab
         target.damage(serverWorld.getDamageSources().playerAttack(player), 6.0f);
-        serverWorld.spawnParticles(ParticleTypes.ENCHANTED_HIT,
-                target.getX(), target.getBodyY(0.5), target.getZ(), 20, 0.3, 0.4, 0.3, 0.2);
+        VeilFx.slashEffect(serverWorld, target);
         target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1));
         target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 80, 0));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 60, 1));
@@ -105,6 +99,29 @@ public class PhaseBladeItem extends SwordItem {
         player.getItemCooldownManager().set(this, COOLDOWN_TICKS);
         stack.damage(1, player, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         return TypedActionResult.success(stack);
+    }
+
+    /** Normal swings leave a small shimmer of veil light on the target. */
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (attacker.getWorld() instanceof ServerWorld sw) {
+            sw.spawnParticles(VeilFx.VEIL_DUST, target.getX(), target.getBodyY(0.5), target.getZ(), 12, 0.3, 0.4, 0.3, 0.1);
+            sw.spawnParticles(ParticleTypes.ENCHANTED_HIT, target.getX(), target.getBodyY(0.5), target.getZ(), 8, 0.3, 0.4, 0.3, 0.2);
+        }
+        return super.postHit(stack, target, attacker);
+    }
+
+    /** A lone mote drifts around whoever is holding the blade. */
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (selected && world instanceof ServerWorld sw && world.getTime() % 4 == 0) {
+            VeilFx.orbit(sw, entity, world.getTime(), 0.7, 1);
+        }
+    }
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        return true;
     }
 
     /** The closest living creature along the player's line of sight, or null. */
