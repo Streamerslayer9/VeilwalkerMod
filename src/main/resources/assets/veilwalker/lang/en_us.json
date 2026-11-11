@@ -1,0 +1,15 @@
+{
+  "itemGroup.veilwalker.main": "Veilwalker",
+  "block.veilwalker.veil_ore": "Veil Ore",
+  "block.veilwalker.veil_block": "Block of Veil Shards",
+  "block.veilwalker.echo_lantern": "Echo Lantern",
+  "item.veilwalker.veil_shard": "Veil Shard",
+  "item.veilwalker.echo_anchor": "Echo Anchor",
+  "item.veilwalker.echo_anchor.bound": "The veil remembers this place.",
+  "item.veilwalker.echo_anchor.unbound": "The anchor is not bound. Sneak + right-click to bind.",
+  "item.veilwalker.echo_anchor.lost": "The anchored dimension has vanished...",
+  "item.veilwalker.echo_anchor.tooltip.unbound": "Unbound",
+  "item.veilwalker.echo_anchor.tooltip.help": "Sneak + Use: bind | Use: blink back",
+  "item.veilwalker.phase_blade": "Phase Blade",
+  "item.veilwalker.phase_blade.tooltip": "25% chance to slip behind your target"
+}

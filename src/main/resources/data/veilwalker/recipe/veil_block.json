@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [ "VVV", "VVV", "VVV" ],
+  "key": { "V": { "item": "veilwalker:veil_shard" } },
+  "result": { "id": "veilwalker:veil_block", "count": 1 }
+}

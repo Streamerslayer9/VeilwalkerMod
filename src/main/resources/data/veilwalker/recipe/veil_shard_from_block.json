@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [ { "item": "veilwalker:veil_block" } ],
+  "result": { "id": "veilwalker:veil_shard", "count": 9 }
+}

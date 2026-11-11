@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "veilwalker",
+  "version": "${version}",
+  "name": "Veilwalker",
+  "description": "Slip through the veil: anchor a place in any dimension and blink back to it, and wield a blade that phases you behind your foes.",
+  "authors": ["You + Claude"],
+  "license": "MIT",
+  "icon": "assets/veilwalker/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.veilwalker.Veilwalker"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

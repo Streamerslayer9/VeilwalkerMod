@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [ "VGV", "GEG", "VGV" ],
+  "key": {
+    "V": { "item": "veilwalker:veil_shard" },
+    "G": { "item": "minecraft:glowstone_dust" },
+    "E": { "item": "minecraft:echo_shard" }
+  },
+  "result": { "id": "veilwalker:echo_lantern", "count": 2 }
+}

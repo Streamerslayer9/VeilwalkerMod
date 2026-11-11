@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [ " E ", "VPV", " E " ],
+  "key": {
+    "E": { "item": "minecraft:echo_shard" },
+    "V": { "item": "veilwalker:veil_shard" },
+    "P": { "item": "minecraft:ender_pearl" }
+  },
+  "result": { "id": "veilwalker:echo_anchor", "count": 1 }
+}
